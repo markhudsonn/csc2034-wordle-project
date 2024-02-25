@@ -24,6 +24,7 @@ Clue = Enum('Clue', ['GREEN', 'YELLOW', 'GREY'])
 # type enumerating the state of the game
 Gamestate =  Enum('Gamestate', ['WON', 'LOST', 'PLAYING'])
 
+# define Hint as an alias for string
 Hint = str
 
 @dataclass
@@ -67,7 +68,7 @@ class Guess:
 
 def check_letter(letter: str, index: int, word: Word) -> Clue:
     """
-    Given a letter and an index, computes the colour of the blue
+    Given a letter and an index, computes the colour of the clue
     based on the word.
     """
     # pre-condition
@@ -98,6 +99,10 @@ def hint(word: Word, guesses: List[Guess]) -> Hint:
     """
     Return random letter from the word that has not been guessed yet.
     """
+    # pre-condition
+    assert len(word) == WORD_LENGTH and \
+              all(len(guess.word) == WORD_LENGTH for guess in guesses), "pre-hint failed"
+    
     guessed_letters = set()
     for guess in guesses:
         for letter in guess.word:
@@ -178,10 +183,13 @@ class Game:
 
 # test the game
 game = Game()
+print("Answer:", game.answer)
 game.make_guess("APPLE")
 game.print_state()
 game.make_guess("HELLO")
-print(game.guesses)
+game.print_state()
+game.make_guess("STAND")
+game.print_state()
 print(game.get_hint())
 
 
