@@ -5,6 +5,7 @@ import random                       # for selecting a random answer
 from typing import List             # for defining custom typed lists
 from urllib.request import urlopen  # to load web data
 import ssl
+from collections import Counter     # for counting letters in a word
 
 # grab a list of words
 url = 'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words'
@@ -66,20 +67,6 @@ class Guess:
             self.clues[i].name for i in range(WORD_LENGTH)]
         return f"{self.word}: {cluestr}"  
 
-def check_letter(letter: str, index: int, word: Word) -> Clue:
-    """
-    Given a letter and an index, computes the colour of the clue
-    based on the word.
-    """
-    # pre-condition
-    assert 0 <= index < WORD_LENGTH and \
-           len(word) == WORD_LENGTH, "pre-check_letter failed."
-           
-    if word[index] == letter: return Clue.GREEN  
-    elif letter not in word: return Clue.GREY
-    else: return Clue.YELLOW
-
-
 def check_guess(word: Word, guess: Word) -> List[Clue]:
     """
     Given the answer and a guess, compute the list of 
@@ -89,10 +76,30 @@ def check_guess(word: Word, guess: Word) -> List[Clue]:
     assert len(word) == WORD_LENGTH and \
            len(guess) == WORD_LENGTH, "pre-check_guess failed"
            
-    clues = []
-    for i,letter in enumerate(guess):
-        clue = check_letter(guess[i], i ,word)
-        clues.append(clue)
+    clues = [Clue.GREY] * WORD_LENGTH
+    
+    # letter_counts = {}
+    # for letter in word:
+    #     if letter in letter_counts:
+    #         letter_counts[letter] += 1
+    #     else:
+    #         letter_counts[letter] = 1
+
+    letter_counts = Counter(word)
+
+    for i, letter in enumerate(guess):
+        if letter == word[i]:
+            clues[i] = Clue.GREEN
+            letter_counts[letter] -= 1
+
+    for i, letter in enumerate(guess):
+        if letter != word[i] and letter in letter_counts and letter_counts[letter] > 0:
+            clues[i] = Clue.YELLOW
+            letter_counts[letter] -= 1
+
+    # post-condition
+    assert len(clues) == WORD_LENGTH, "post-check_guess failed"
+    
     return clues
 
 def hint(word: Word, guesses: List[Guess]) -> Hint:
@@ -122,7 +129,7 @@ class Game:
     guesses: List[Guess]
     gstate: Gamestate
 
-    def __init__(self, answer="STOUT"):
+    def __init__(self, answer="BELLS"):
         """
         Constructor for game.
         """
@@ -184,12 +191,12 @@ class Game:
 # test the game
 game = Game()
 print("Answer:", game.answer)
-game.make_guess("APPLE")
+game.make_guess("SELLS")
 game.print_state()
 game.make_guess("HELLO")
-game.print_state()
+# game.print_state()
 game.make_guess("STAND")
-game.print_state()
+# game.print_state()
 print(game.get_hint())
 
 
