@@ -99,7 +99,7 @@ def check_guess(word: Word, guess: Word) -> List[Clue]:
 
     # post-condition
     assert len(clues) == WORD_LENGTH, "post-check_guess failed"
-    
+
     return clues
 
 def hint(word: Word, guesses: List[Guess]) -> Hint:
@@ -153,6 +153,32 @@ class Game:
         if word == self.answer: self.gstate = Gamestate.WON
         elif len(self.guesses) == MAX_GUESSES: self.gstate = Gamestate.LOST
 
+    def hard_guess(self, word: Word):
+        """
+        Make a hard guess (All letters from previous guesses must be used if green or yellow).
+        """
+
+        word = word.upper()
+
+        # pre-condition
+        assert self.gstate == Gamestate.PLAYING and \
+               len(self.guesses) < MAX_GUESSES and \
+               word in WORDS, "pre-hard_guess failed."
+        
+        previous_letters = set()
+        for guess in self.guesses:
+            for i, letter in enumerate(guess.word):
+                if guess.clues[i] in [Clue.GREEN, Clue.YELLOW]:
+                    previous_letters.add(letter)    
+        
+        print(previous_letters)
+        assert all(letter in word for letter in previous_letters), "post-hard_guess failed"
+        
+        self.guesses.append(Guess(word, check_guess(self.answer, word)))
+        if word == self.answer: self.gstate = Gamestate.WON
+
+        elif len(self.guesses) == MAX_GUESSES: self.gstate = Gamestate.LOST
+        
     def get_hint(self) -> Hint:
         """
         Get a hint for the current game.
@@ -191,12 +217,14 @@ class Game:
 # test the game
 game = Game()
 print("Answer:", game.answer)
-game.make_guess("SELLS")
+game.make_guess("SLEEP")
 game.print_state()
-game.make_guess("HELLO")
+game.hard_guess("SOLES")
+game.print_state()
+# game.make_guess("HELLO")
 # game.print_state()
-game.make_guess("STAND")
+# game.make_guess("STAND")
 # game.print_state()
-print(game.get_hint())
-
+# print(game.get_hint())
+# game.hard_guess("HELLS")
 
