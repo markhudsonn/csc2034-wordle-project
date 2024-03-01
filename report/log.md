@@ -15,6 +15,8 @@ Implemented check_guess and removed check_letter. check_guess now returns a list
 
 Implemented hard guess which forces the user to use letters that are yellow or green in the next guess.
 
+Calling hint multiple times can return the same letter
+
 
 
 EXTRA IDEAS:

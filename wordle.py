@@ -25,7 +25,7 @@ Clue = Enum('Clue', ['GREEN', 'YELLOW', 'GREY'])
 # type enumerating the state of the game
 Gamestate =  Enum('Gamestate', ['WON', 'LOST', 'PLAYING'])
 
-# define Hint as an alias for string
+# type string for hint
 Hint = str
 
 @dataclass
