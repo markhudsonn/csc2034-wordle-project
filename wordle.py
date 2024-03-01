@@ -4,13 +4,13 @@ import typing                       # for type hinting
 import random                       # for selecting a random answer
 from typing import List             # for defining custom typed lists
 from urllib.request import urlopen  # to load web data
-import ssl
+# import ssl
 from collections import Counter     # for counting letters in a word
 
 # grab a list of words
 url = 'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words'
-context = ssl._create_unverified_context()
-WORDS = [word.rstrip().decode('UTF-8').upper() for word in urlopen(url, context=context).readlines()]
+# context = ssl._create_unverified_context()
+WORDS = [word.rstrip().decode('UTF-8').upper() for word in urlopen(url).readlines()]
 
 # constants
 WORD_LENGTH = 5 
@@ -227,4 +227,3 @@ game.print_state()
 # game.print_state()
 # print(game.get_hint())
 # game.hard_guess("HELLS")
-
