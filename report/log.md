@@ -49,3 +49,8 @@ Modify check_letter: Update check_letter to take additional information, such as
 Directly Compute Clues in check_guess: A better approach might be to adjust the logic within check_guess to first mark all GREEN clues, then mark YELLOW clues while keeping track of the frequency of each letter in the target word to ensure letters are not over-matched.
 
 Letter Frequency Tracking: Before iterating through the guess, create a dictionary to count the occurrences of each letter in the target word. As you assign GREEN clues, decrement the count for the matched letters. When considering YELLOW clues, only assign them if the letter's count is greater than zero, indicating that there are still unmatched occurrences of that letter in the target word.
+
+
+Reference Ideas:
+Talk about importance of testing and different methods. I researched into X so found this was best method of testing.
+Talk about how solutions could have better Big O performance. This would help with scalability and reduce server costs. Link to NY times saving money
