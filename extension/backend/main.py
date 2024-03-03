@@ -6,7 +6,7 @@ CORS(app)
 
 game = wordle.Game()
 
-@app.route('/api/new_game', methods=['GET'])
+@app.route('/api/new_game', methods=['POST'])
 def new_game():
     game.reset()
     return jsonify({"message": "New game has started"}), 200
