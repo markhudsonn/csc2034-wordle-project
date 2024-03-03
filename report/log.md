@@ -13,9 +13,9 @@ Implemented hint function which only returns 1 char from remaining letters ungue
 
 Implemented check_guess and removed check_letter. check_guess now returns a list of clues for each letter in the guess. This is a better implementation as it correctly handles repeated letters in the word so the clues are correct and more informative to the user.
 
-Implemented hard guess which forces the user to use letters that are yellow or green in the next guess.
+Implemented hard guess which forces the user to use $$letters that are yellow or green in the next guess.
 
-Calling hint multiple times can return the same letter
+Calling hint multiple times can return the same letter $$
 
 
 
@@ -24,7 +24,7 @@ EXTRA IDEAS:
 Could reduce code duplication by making process_guess for hard guess and normal guess
 Talk about how solutions could have better Big O performance. This would help with scalability and reduce server costs.
 Some other preconditions could be cant repeat same guess
-
+Draw diagram of how I solved check guess
 
 
 
