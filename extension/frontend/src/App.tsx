@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { IoIosRefresh } from "react-icons/io";
-import './globals.css'
-import './App.css'
+
 
 const API_URL = "http://127.0.0.1:5000/api";
 
@@ -59,13 +58,15 @@ function App() {
     }
   }
 
-  const returnGuesses = () => {
-    if (guesses.length === 0) {
-      return <li>No guesses yet</li>;
-    }
-    return guesses.map((guess, index) => (
-      <li key={index}>{guess}</li>
-    ));
+  const renderGuesses = () => {
+    return (
+      <div>
+        <h2>Guesses</h2>
+        <ul>
+          {guesses.map((guess, index) => <li key={index}>{guess}</li>)}
+        </ul>
+      </div>
+    )
   }
 
   return (
@@ -73,13 +74,13 @@ function App() {
       <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>CSC2034 Wordle Game</h1>
       <b>Game status: {state}</b>
       <Separator className="my-10" />
-      {returnGuesses()}
+      {guesses.length > 0 && renderGuesses()}
       <div style={{ margin: '0 auto', width: '50%' }}>
-        <Input className="w-full" type="text" value={guess} onChange={handleGuessChange} placeholder="Your guess here..." />
+        <Input className="m-2" value={guess} onChange={handleGuessChange} placeholder="Enter your guess" />
         <Button className="m-2" onClick={handleGuessSubmit}>Submit Guess</Button>
-        <Button className="m-2" onClick={getHint}>Get Hint</Button>
+        <Button className="m-2" variant="outline" onClick={getHint}>Get Hint</Button>
       </div>
-      <Button className="m-2" variant="secondary" onClick={handleNewGame}><IoIosRefresh /></Button>
+      <Button className="m-2" variant="ghost" onClick={handleNewGame}><IoIosRefresh /></Button>
       <br/>
       {hint && <div>Hint: {hint}</div>}
       {state === "WON" && <div>Congratulations! You won!</div>}
