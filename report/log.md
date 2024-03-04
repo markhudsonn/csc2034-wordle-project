@@ -29,6 +29,12 @@ CITE shadcn, confetti, axios, vite, flask,
 
 Added @error handlers in flask to return assert errors to the frontend
 
+Displayed error message on frontend.
+
+HOW MANY GUESSES? and check guess seems to have wrong asserts for length
+
+Changed asserts line by line so each has more meaningful error message
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess

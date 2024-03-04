@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
-import { IoIosRefresh } from "react-icons/io";
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
+import { IoIosRefresh, IoIosWarning } from "react-icons/io";
 
 interface Guess {
   word: string;
@@ -23,6 +24,11 @@ function App() {
     getState();
     getGuesses();
   }, []);
+
+  useEffect(() => {
+    const timer = message && setTimeout(() => setMessage(""), 3000);
+    return () => clearTimeout(timer);
+  }, [message]);
 
   const getState = async () => {
     try {
@@ -139,27 +145,37 @@ function App() {
     )
   }
 
-  setTimeout(() => {
-    setMessage("");
-  }, 5000);
-
   return (
     <div className="App">
       <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>CSC2034 Wordle Game</h1>
       <b>Game status: {state}</b>
-      <Separator className="my-10" />
+      <Separator className="my-5" />
+      
+      {message && (
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <Alert variant="destructive" className="m-2" style={{ width: '50%', marginBottom: '20px' }}>
+            <IoIosWarning style={{fontSize: '3em' }} />
+            <AlertTitle style={{fontSize: '1.5em'}}>Error!</AlertTitle>
+            <AlertDescription style={{fontSize: '1.2em'}}>
+              {message}
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+
       {guesses.length > 0 && renderGuesses()}
       <div style={{ margin: '0 auto', width: '30%' }}>
         <Input className="m-2" value={guess} onChange={handleGuessChange} placeholder="Enter 5 letter word..." />
-        <Button className="m-2" onClick={handleGuessSubmit}>Submit Guess</Button>
-        <Button className="m-2" variant="outline" onClick={getHint}>Get Hint</Button>
+        <Button className="m-2" onClick={handleGuessSubmit}>Guess</Button>
+        <Button className="m-2" variant="destructive">Hard Guess</Button>
       </div>
-      {hint && <div>Hint: {hint}</div>}
-      <Button className="m-2" variant="ghost" onClick={handleNewGame}><IoIosRefresh /></Button>
-      <br/>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Button className="m-2" variant="outline" onClick={getHint}>Get Hint</Button>
+        {hint && <div>Hint: {hint}</div>}
+        <Button className="m-2" variant="ghost" onClick={handleNewGame}><IoIosRefresh /></Button>
+      </div>
       {state === "WON" && <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>You won!</h1>}
       {state === "LOST" && <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>You lost!</h1>}
-      {message && <div style={{color: 'red', fontSize: '2em'}}>{message}</div>}
     </div>
   )
 }
