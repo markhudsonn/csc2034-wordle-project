@@ -79,8 +79,10 @@ def check_guess(word: Word, guess: Word) -> List[Clue]:
     clues corresponding to each letter.
     """
     # pre-condition
-    assert len(word) == WORD_LENGTH and \
-           len(guess) == WORD_LENGTH, "pre-check_guess failed"
+    assert len(word) == WORD_LENGTH, "word must be 5 letters long"
+    assert len(guess) == WORD_LENGTH, "guess must be 5 letters long"
+    # assert len(word) == WORD_LENGTH and \
+    #        len(guess) == WORD_LENGTH, "pre-check_guess failed"
            
     clues = [Clue.GREY] * WORD_LENGTH
     
@@ -104,7 +106,7 @@ def check_guess(word: Word, guess: Word) -> List[Clue]:
             letter_counts[letter] -= 1
 
     # post-condition
-    assert len(clues) == WORD_LENGTH, "post-check_guess failed"
+    assert len(clues) == WORD_LENGTH, "clues not 5 letters long"
 
     return clues
 
@@ -113,8 +115,10 @@ def hint(word: Word, guesses: List[Guess]) -> Hint:
     Return random letter from the word that has not been guessed yet.
     """
     # pre-condition
-    assert len(word) == WORD_LENGTH and \
-              all(len(guess.word) == WORD_LENGTH for guess in guesses), "pre-hint failed"
+    assert len(word) == WORD_LENGTH, "word must be 5 letters long"
+    assert all(len(guess.word) == WORD_LENGTH for guess in guesses), "guesses must all be 5 letters long"
+    # assert len(word) == WORD_LENGTH and \
+    #           all(len(guess.word) == WORD_LENGTH for guess in guesses), "pre-hint failed"
     
     guessed_letters = set()
     for guess in guesses:
@@ -125,7 +129,10 @@ def hint(word: Word, guesses: List[Guess]) -> Hint:
     
     if unguessed_letters:
         hint = random.choice(unguessed_letters)
-        assert len(hint) == 1 and hint.isalpha() and hint.isupper(), "post-hint failed"
+        assert len(hint) == 1, "hint must be a single letter"
+        assert hint.isalpha(), "hint must be a letter"
+        assert hint.isupper(), "hint must be uppercase"
+        # assert len(hint) == 1 and hint.isalpha() and hint.isupper(), "post-hint failed"
         return hint
     else:
         return None
