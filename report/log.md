@@ -27,6 +27,8 @@ used state and axios to get data from backend and display it on the frontend
 
 CITE shadcn, confetti, axios, vite, flask,
 
+Added @error handlers in flask to return assert errors to the frontend
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess

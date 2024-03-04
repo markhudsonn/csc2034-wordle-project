@@ -5,14 +5,19 @@ import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { IoIosRefresh } from "react-icons/io";
 
+interface Guess {
+  word: string;
+  clues: string[];
+}
 
 const API_URL = "http://127.0.0.1:5000/api";
 
 function App() {
-  const [state, setState] = useState("Connecting...");
-  const [guess, setGuess] = useState("");
-  const [guesses, setGuesses] = useState([]);
-  const [hint, setHint] = useState("");
+  const [state, setState] = useState<string>("Connecting...");
+  const [guess, setGuess] = useState<string>("");
+  const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [hint, setHint] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     getState();
@@ -20,13 +25,29 @@ function App() {
   }, []);
 
   const getState = async () => {
-    const response = await axios.get(`${API_URL}/get_state`);
-    setState(response.data.state);
+    try {
+      const response = await axios.get(`${API_URL}/get_state`);
+      setState(response.data.state);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
+    }
   }
 
   const getGuesses = async () => {
-    const response = await axios.get(`${API_URL}/get_guesses`);
-    setGuesses(response.data.guesses);
+    try {
+      const response = await axios.get(`${API_URL}/get_guesses`);
+      setGuesses(response.data.guesses);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
+    }
   }
 
   const handleGuessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,26 +56,48 @@ function App() {
 
   const handleGuessSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const response = await axios.post(`${API_URL}/make_guess`, {word: guess});
-    if (response.data.message === "Guess made") {
+    try {
+      const response = await axios.post(`${API_URL}/make_guess`, {word: guess});
       setGuess("");
       getState();
       getGuesses();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
     }
   }
 
   const getHint = async () => {
-    const response = await axios.get(`${API_URL}/get_hint`);
-    setHint(response.data.hint);
+    try {
+      const response = await axios.get(`${API_URL}/get_hint`);
+      setHint(response.data.hint);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
+    }
   }
 
   const handleNewGame = async () => {
-    const response = await axios.post(`${API_URL}/new_game`);
-    if(response.data.message === "New game has started") {
-      setState("PLAYING");
-      setGuesses([]);
-      setHint("");
-      setGuess("");
+    try {
+      const response = await axios.post(`${API_URL}/new_game`);
+      if(response.data.message === "New game has started") {
+        setState("PLAYING");
+        setGuesses([]);
+        setHint("");
+        setGuess("");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
     }
   }
 
@@ -65,9 +108,9 @@ function App() {
           {guesses.map((guess, index) => (
             <li key={index} style={{marginBottom: '20px'}}>
               {guess.word.split('').map((letter, letterIndex) => {
-                let color = guess.clues[letterIndex] === 'GREEN' ? 'green' :
-                            guess.clues[letterIndex] === 'YELLOW' ? 'orange' : 'grey';
-                let status = guess.clues[letterIndex];
+                const color = guess.clues[letterIndex] === 'GREEN' ? 'green' :
+                              guess.clues[letterIndex] === 'YELLOW' ? 'orange' : 'grey';
+                const status = guess.clues[letterIndex];
                 return (
                   <span key={letter + letterIndex} style={{ 
                     fontWeight: 'bold', 
@@ -96,6 +139,10 @@ function App() {
     )
   }
 
+  setTimeout(() => {
+    setMessage("");
+  }, 5000);
+
   return (
     <div className="App">
       <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>CSC2034 Wordle Game</h1>
@@ -112,6 +159,7 @@ function App() {
       <br/>
       {state === "WON" && <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>You won!</h1>}
       {state === "LOST" && <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>You lost!</h1>}
+      {message && <div style={{color: 'red', fontSize: '2em'}}>{message}</div>}
     </div>
   )
 }

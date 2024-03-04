@@ -7,6 +7,14 @@ CORS(app)
 
 game = wordle.Game()
 
+@app.errorhandler(AssertionError)
+def handle_assertion_error(e):
+  return jsonify({"message": str(e)}), 400
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+  return jsonify({"message": str(e)}), 500
+
 @app.route('/api/new_game', methods=['POST'])
 def new_game():
   game.reset()
@@ -19,12 +27,9 @@ def get_hint():
 
 @app.route('/api/make_guess', methods=['POST'])
 def make_guess():
-  word = request.json.get('word')
-  if word:
-      game.make_guess(word)
-      return jsonify({"message": "Guess made"}), 200
-  else:
-      return jsonify({"message": "No word received"}), 400
+  word = request.json['word']
+  game.make_guess(word)
+  return jsonify({"message": "Guess: " + word + " has been made"}), 200
 
 @app.route('/api/get_state', methods=['GET'])
 def get_state():
