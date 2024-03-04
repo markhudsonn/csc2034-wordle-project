@@ -17,7 +17,13 @@ Implemented hard guess which forces the user to use $$letters that are yellow or
 
 Calling hint multiple times can return the same letter $$
 
+Exported jupyter code into python in backend folder
 
+Then created main.py which creates endpoints for the game.
+
+Created frontend folder with Vite and followed Shadcn installation guide 
+
+used state and axios to get data from backend and display it on the frontend
 
 EXTRA IDEAS:
 
@@ -25,7 +31,8 @@ Could reduce code duplication by making process_guess for hard guess and normal 
 Talk about how solutions could have better Big O performance. This would help with scalability and reduce server costs.
 Some other preconditions could be cant repeat same guess
 Draw diagram of how I solved check guess
-
+Say I could do end to end testing 
+Benefit of backend is that user's cannot cheat as answers are checked on the server
 
 
 

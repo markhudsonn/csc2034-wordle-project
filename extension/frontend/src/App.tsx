@@ -61,9 +61,36 @@ function App() {
   const renderGuesses = () => {
     return (
       <div>
-        <h2>Guesses</h2>
-        <ul>
-          {guesses.map((guess, index) => <li key={index}>{guess}</li>)}
+        <ul style={{paddingBottom: '20px'}}>
+          {guesses.map((guess, index) => (
+            <li key={index} style={{marginBottom: '20px'}}>
+              {guess.word.split('').map((letter, letterIndex) => {
+                let color = guess.clues[letterIndex] === 'GREEN' ? 'green' :
+                            guess.clues[letterIndex] === 'YELLOW' ? 'orange' : 'grey';
+                let status = guess.clues[letterIndex];
+                return (
+                  <span key={letter + letterIndex} style={{ 
+                    fontWeight: 'bold', 
+                    marginRight: '15px',
+                    width: '60px',
+                    height: '60px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: '8px',
+                    backgroundColor: color,
+                    display: 'inline-block',
+                    color: status === 'GREY' ? 'black' : 'black',
+                    boxShadow: `0 0 15px ${color}`,
+                    fontSize: '1.5em',
+                    textAlign: 'center',
+                    lineHeight: '60px'
+                  }}>
+                    {letter}
+                  </span>
+                )
+              })}
+            </li>
+          ))}
         </ul>
       </div>
     )
@@ -75,14 +102,14 @@ function App() {
       <b>Game status: {state}</b>
       <Separator className="my-10" />
       {guesses.length > 0 && renderGuesses()}
-      <div style={{ margin: '0 auto', width: '50%' }}>
-        <Input className="m-2" value={guess} onChange={handleGuessChange} placeholder="Enter your guess" />
+      <div style={{ margin: '0 auto', width: '30%' }}>
+        <Input className="m-2" value={guess} onChange={handleGuessChange} placeholder="Enter 5 letter word..." />
         <Button className="m-2" onClick={handleGuessSubmit}>Submit Guess</Button>
         <Button className="m-2" variant="outline" onClick={getHint}>Get Hint</Button>
       </div>
+      {hint && <div>Hint: {hint}</div>}
       <Button className="m-2" variant="ghost" onClick={handleNewGame}><IoIosRefresh /></Button>
       <br/>
-      {hint && <div>Hint: {hint}</div>}
       {state === "WON" && <div>Congratulations! You won!</div>}
     </div>
   )
