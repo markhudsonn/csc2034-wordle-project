@@ -25,6 +25,8 @@ Created frontend folder with Vite and followed Shadcn installation guide
 
 used state and axios to get data from backend and display it on the frontend
 
+CITE shadcn, confetti, axios, vite, flask,
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess
