@@ -148,7 +148,7 @@ function App() {
   return (
     <div className="App">
       <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>CSC2034 Wordle Game</h1>
-      <b>Game status: {state}</b>
+      <b style={{ color: state === "PLAYING" ? 'green' : state === "WON" ? 'green' : 'red' }}>Game status: {state}</b>
       <Separator className="my-5" />
       
       {message && (
@@ -174,8 +174,6 @@ function App() {
         {hint && <div>Hint: {hint}</div>}
         <Button className="m-2" variant="ghost" onClick={handleNewGame}><IoIosRefresh /></Button>
       </div>
-      {state === "WON" && <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>You won!</h1>}
-      {state === "LOST" && <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>You lost!</h1>}
     </div>
   )
 }
