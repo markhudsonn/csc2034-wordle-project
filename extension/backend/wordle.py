@@ -59,6 +59,12 @@ class Guess:
             f"Invariant violated: len(Guess.clues) <> {WORD_LENGTH}"              
         self._clues = clues
 
+    def to_dict(self) -> dict:
+        """
+        Convert the guess to a dictionary for JSON.
+        """
+        return {"word": self.word, "clues": [clue.name for clue in self.clues]}
+
     def __repr__(self):
         """
         Custom representation for pretty printing.
@@ -202,14 +208,19 @@ class Game:
         """
         return self.gstate == Gamestate.WON or self.gstate == Gamestate.LOST 
 
-
     def reset(self):
         """
         Reset the game by picking a new word, clearing the guess, and
         setting the state back to playing.
         """
         # pre-condition
-        assert self.game_over(), "Cannot reset, game in play"
+        # assert self.game_over(), "Cannot reset, game in play"
         self.answer = random.choice(WORDS)
         self.guesses = []
         self.gstate = Gamestate.PLAYING
+
+    def get_guesses_for_frontend(self) -> List[dict]:
+        """
+        Convert the guesses to a list of dictionaries for JSON for the frontend.
+        """
+        return [guess.to_dict() for guess in self.guesses]
