@@ -151,6 +151,11 @@ class Game:
         word = word.upper() 
 
         # pre-condition
+        assert self.gstate == Gamestate.PLAYING, "Game must be in play to make a guess."
+        assert len(self.guesses) < MAX_GUESSES, "Cannot make more than 6 guesses."
+        assert len(word) == WORD_LENGTH, "Guess must be 5 letters long."
+        assert word in WORDS, "Guess must be a valid word."
+        assert word in WORDS, "Guess must be a valid word."
         assert self.gstate == Gamestate.PLAYING and \
                len(self.guesses) < MAX_GUESSES and \
                word in WORDS, "pre-guess failed."
