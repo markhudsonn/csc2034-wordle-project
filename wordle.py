@@ -119,7 +119,10 @@ def hint(word: Word, guesses: List[Guess]) -> Hint:
     
     if unguessed_letters:
         hint = random.choice(unguessed_letters)
+
+        # post-condition
         assert len(hint) == 1 and hint.isalpha() and hint.isupper(), "post-hint failed"
+
         return hint
     else:
         return None
@@ -155,7 +158,7 @@ class Game:
 
     def hard_guess(self, word: Word):
         """
-        Make a hard guess (All letters from previous guesses must be used if green or yellow).
+        Make a hard guess at the wordle (All letters from previous guesses must be used if green or yellow).
         """
 
         word = word.upper()
