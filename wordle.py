@@ -174,7 +174,6 @@ class Game:
                 if guess.clues[i] in [Clue.GREEN, Clue.YELLOW]:
                     previous_letters.add(letter)    
         
-        print(previous_letters)
         assert all(letter in word for letter in previous_letters), "post-hard_guess failed"
         
         self.guesses.append(Guess(word, check_guess(self.answer, word)))
