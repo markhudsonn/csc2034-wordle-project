@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -19,6 +19,8 @@ function App() {
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [hint, setHint] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
+  const [remainingGuesses, setRemainingGuesses] = useState<number>();
 
   useEffect(() => {
     getState();
@@ -34,6 +36,9 @@ function App() {
     try {
       const response = await axios.get(`${API_URL}/get_state`);
       setState(response.data.state);
+      if(response.data.state === "LOST") {
+        getAnswer();
+      }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         setMessage(error.response.data.message);
@@ -56,6 +61,19 @@ function App() {
     }
   }
 
+  const getRemainingGuesses = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/get_remaining_guesses`);
+      setRemainingGuesses(response.data.remaining_guesses);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
+    }
+  }
+
   const handleGuessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGuess(e.target.value);
   }
@@ -63,10 +81,11 @@ function App() {
   const handleGuessSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_URL}/make_guess`, {word: guess});
+      await axios.post(`${API_URL}/make_guess`, {word: guess});
       setGuess("");
       getState();
       getGuesses();
+      getRemainingGuesses();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         setMessage(error.response.data.message);
@@ -89,6 +108,21 @@ function App() {
     }
   }
 
+  const getAnswer = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/get_answer`);
+      setAnswer(response.data.answer);
+      return response.data.answer;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
+      return "";
+    }
+  }
+
   const handleNewGame = async () => {
     try {
       const response = await axios.post(`${API_URL}/new_game`);
@@ -97,6 +131,8 @@ function App() {
         setGuesses([]);
         setHint("");
         setGuess("");
+        setAnswer("");
+        getRemainingGuesses();
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -149,8 +185,18 @@ function App() {
     <div className="App">
       <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>CSC2034 Wordle Game</h1>
       <b style={{ color: state === "PLAYING" ? 'black' : state === "WON" ? 'green' : 'red' }}>Game status: {state}</b>
+      {state === "PLAYING" && remainingGuesses && <p>Remaining guesses: {remainingGuesses}</p>}
       <Separator className="my-5" />
-      
+      {state === "LOST" && (
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <Alert variant="default" className="m-2" style={{ width: '50%', marginBottom: '20px' }}>
+            <AlertTitle style={{fontSize: '1.5em'}}>Game Over!</AlertTitle>
+            <AlertDescription style={{fontSize: '1.2em'}}>
+              The correct answer was: {answer || <span>Loading...</span>}
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
       {message && (
         <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <Alert variant="destructive" className="m-2" style={{ width: '50%', marginBottom: '20px' }}>
@@ -179,3 +225,4 @@ function App() {
 }
 
 export default App;
+

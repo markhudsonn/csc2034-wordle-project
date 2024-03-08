@@ -236,3 +236,19 @@ class Game:
         Convert the guesses to a list of dictionaries for JSON for the frontend.
         """
         return [guess.to_dict() for guess in self.guesses]
+    
+    def get_answer(self) -> Word:
+        """
+        Return the answer to the game and set the game state to lost.
+        """
+
+        if self.gstate == Gamestate.PLAYING:
+            self.gstate = Gamestate.LOST
+
+        return self.answer
+    
+    def get_remaining_guesses(self) -> int:
+        """
+        Return the number of remaining guesses.
+        """
+        return MAX_GUESSES - len(self.guesses)

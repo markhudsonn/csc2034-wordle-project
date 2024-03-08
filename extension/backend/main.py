@@ -18,6 +18,7 @@ def handle_exception(e):
 @app.route('/api/new_game', methods=['POST'])
 def new_game():
   game.reset()
+  
   return jsonify({"message": "New game has started"}), 200
 
 @app.route('/api/get_hint', methods=['GET'])
@@ -40,6 +41,16 @@ def get_state():
 def get_guesses():
   guesses = game.get_guesses_for_frontend()
   return jsonify({"guesses": guesses}), 200
+
+@app.route('/api/get_answer', methods=['GET'])
+def get_answer():
+  answer = game.get_answer()
+  return jsonify({"answer": answer}), 200
+
+@app.route('/api/get_remaining_guesses', methods=['GET'])
+def get_remaining_guesses():
+  remaining_guesses = game.get_remaining_guesses()
+  return jsonify({"remaining_guesses": remaining_guesses}), 200
 
 if __name__ == '__main__':
   app.run(debug=True)

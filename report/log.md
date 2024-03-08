@@ -47,13 +47,17 @@ Assumed that player can guess same word multiple times
 
 Maybe I should have done a formal specification?
 
+Added get_answer to the extension game so that the user can see the answer and the game state is set to playing if not already lost. if this is called when the game is playing, the game state is set to lost to prevent cheating.
+
+Added get guesses to display on frontend
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess
 Talk about how solutions could have better Big O performance. This would help with scalability and reduce server costs.
 Some other preconditions could be cant repeat same guess
 Draw diagram of how I solved check guess
-Say I could do end to end testing 
+Say I could do end to end testing for the frontend web app
 Benefit of backend is that user's cannot cheat as answers are checked on the server
 
 
