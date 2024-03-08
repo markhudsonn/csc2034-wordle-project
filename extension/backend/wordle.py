@@ -173,28 +173,34 @@ class Game:
 
     def hard_guess(self, word: Word):
         """
-        Make a hard guess (All letters from previous guesses must be used if green or yellow).
+        Make a hard guess (All green letters from previous guesses must be in the correct place and yellow letters must be present).
         """
 
         word = word.upper()
 
         # pre-condition
-        assert self.gstate == Gamestate.PLAYING and \
-               len(self.guesses) < MAX_GUESSES and \
-               word in WORDS, "pre-hard_guess failed."
-        
-        previous_letters = set()
+        assert self.gstate == Gamestate.PLAYING, "game must be in play to make guess"
+        assert len(word) == WORD_LENGTH, "word not correct length"
+        assert word in WORDS, "word not in word list"
+
+        green_letters = {}
+        yellow_letters = set()
         for guess in self.guesses:
             for i, letter in enumerate(guess.word):
-                if guess.clues[i] in [Clue.GREEN, Clue.YELLOW]:
-                    previous_letters.add(letter)    
-        
-        print(previous_letters)
-        assert all(letter in word for letter in previous_letters), "post-hard_guess failed"
+                if guess.clues[i] == Clue.GREEN:
+                    green_letters[i] = letter
+                elif guess.clues[i] == Clue.YELLOW:
+                    yellow_letters.add(letter)
+
+        for i, letter in green_letters.items():
+            assert word[i] == letter, f"Green letter {letter} must be at position {i+1}"
+
+        # post-conditions
+        assert all(word[i] == letter for i, letter in green_letters.items()), "Green letters not in word at correct position"
+        assert all(letter in word for letter in yellow_letters), "Yellow letters not present in word"
         
         self.guesses.append(Guess(word, check_guess(self.answer, word)))
         if word == self.answer: self.gstate = Gamestate.WON
-
         elif len(self.guesses) == MAX_GUESSES: self.gstate = Gamestate.LOST
         
     def get_hint(self) -> Hint:

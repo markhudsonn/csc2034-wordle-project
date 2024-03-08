@@ -53,6 +53,8 @@ Added get guesses to display on frontend
 
 Implemented hard guess to frontend, this makes post request to hard guess endpoint
 
+My original hard guess implementation allowed greens to be anywhere in the word. I changed this to only allow greens to be in the same position as the original guess. This is because the user could guess a word with a green letter in the wrong position and then use hard guess to find the correct position of the green letter. This would be cheating.
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess
@@ -61,7 +63,6 @@ Some other preconditions could be cant repeat same guess
 Draw diagram of how I solved check guess
 Say I could do end to end testing for the frontend web app
 Benefit of backend is that user's cannot cheat as answers are checked on the server
-
 
 
 Reference Ideas:
