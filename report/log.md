@@ -51,6 +51,8 @@ Added get_answer to the extension game so that the user can see the answer and t
 
 Added get guesses to display on frontend
 
+Implemented hard guess to frontend, this makes post request to hard guess endpoint
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess

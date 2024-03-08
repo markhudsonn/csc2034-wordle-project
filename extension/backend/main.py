@@ -32,6 +32,12 @@ def make_guess():
   game.make_guess(word)
   return jsonify({"message": "Guess: " + word + " has been made"}), 200
 
+@app.route('/api/make_hard_guess', methods=['POST'])
+def hard_guess():
+  word = request.json['word']
+  game.hard_guess(word)
+  return jsonify({"message": "Hard guess: " + word + " has been made"}), 200
+
 @app.route('/api/get_state', methods=['GET'])
 def get_state():
   state = game.gstate.name

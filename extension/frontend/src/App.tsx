@@ -95,6 +95,23 @@ function App() {
     }
   }
 
+  const handleHardGuessSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${API_URL}/make_hard_guess`, {word: guess});
+      setGuess("");
+      getState();
+      getGuesses();
+      getRemainingGuesses();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
+    }
+  }
+
   const getHint = async () => {
     try {
       const response = await axios.get(`${API_URL}/get_hint`);
@@ -213,7 +230,7 @@ function App() {
       <div style={{ margin: '0 auto', width: '30%' }}>
         <Input className="m-2" value={guess} onChange={handleGuessChange} placeholder="Enter 5 letter word..." />
         <Button className="m-2" onClick={handleGuessSubmit}>Guess</Button>
-        <Button className="m-2" variant="destructive">Hard Guess</Button>
+        <Button className="m-2" variant="destructive" onClick={handleHardGuessSubmit}>Hard Guess</Button>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Button className="m-2" variant="outline" onClick={getHint}>Get Hint</Button>
