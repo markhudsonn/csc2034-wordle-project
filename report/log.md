@@ -13,7 +13,7 @@ Implemented hint function which only returns 1 char from remaining letters ungue
 
 Implemented check_guess and removed check_letter. check_guess now returns a list of clues for each letter in the guess. This is a better implementation as it correctly handles repeated letters in the word so the clues are correct and more informative to the user.
 
-Implemented hard guess which forces the user to use $$letters that are yellow or green in the next guess.
+Implemented hard guess which forces the user to use letters that are yellow or green in the next guess.
 
 Calling hint multiple times can return the same letter $$
 
@@ -63,6 +63,7 @@ Some other preconditions could be cant repeat same guess
 Draw diagram of how I solved check guess
 Say I could do end to end testing for the frontend web app
 Benefit of backend is that user's cannot cheat as answers are checked on the server
+State how the various different inputs posssible make it hard to test all edge cases
 
 
 Reference Ideas:

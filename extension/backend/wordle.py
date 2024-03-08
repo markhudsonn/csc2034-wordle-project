@@ -163,9 +163,6 @@ class Game:
         assert len(word) == WORD_LENGTH, "Guess must be 5 letters long."
         assert word in WORDS, "Guess must be a valid word."
         assert word in WORDS, "Guess must be a valid word."
-        assert self.gstate == Gamestate.PLAYING and \
-               len(self.guesses) < MAX_GUESSES and \
-               word in WORDS, "pre-guess failed."
                
         self.guesses.append(Guess(word, check_guess(self.answer, word)))
         if word == self.answer: self.gstate = Gamestate.WON
@@ -208,7 +205,7 @@ class Game:
         Get a hint for the current game.
         """
         # pre-condition
-        assert self.gstate == Gamestate.PLAYING, "pre-get_hint failed."
+        assert self.gstate == Gamestate.PLAYING, "Game must be in play to get a hint."
         return hint(self.answer, self.guesses)
 
     def print_state(self):
