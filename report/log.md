@@ -35,6 +35,18 @@ HOW MANY GUESSES? and check guess seems to have wrong asserts for length
 
 Changed asserts line by line so each has more meaningful error message
 
+assumed that dont need to check word isn't digits etc as it won't be in the word list
+
+1 assumption about get hint is number of occurances of a letter, e.g. if there are 2 a's in the word, the hint returned will be more likely to be a.
+
+I added extra pre conditions and post conditions to new check_guess. Didn't bother for check_letter as new check_guess made it redundant.
+
+Also added more meaningful messages to all asserts so that if they fail, the user knows what went wrong.
+
+Assumed that player can guess same word multiple times
+
+Maybe I should have done a formal specification?
+
 EXTRA IDEAS:
 
 Could reduce code duplication by making process_guess for hard guess and normal guess
@@ -44,28 +56,6 @@ Draw diagram of how I solved check guess
 Say I could do end to end testing 
 Benefit of backend is that user's cannot cheat as answers are checked on the server
 
-
-
-
-
-
-Consider the word "bells" as the target word and the guess "sells". According to the rules of the game, the clues should be:
-
-The first letter "s" should be YELLOW because "s" is in the word but in the wrong position.
-The second letter "e" should be GREEN because it is in the correct position.
-The third and fourth letters "l" should be GREEN because they are in the correct position.
-The fifth letter "s" should be GREY, because there is only one "s" in the target word, and its correct position has already been accounted for by the first letter in the guess being marked YELLOW.
-However, the naive implementation does not handle the last case correctly. It would incorrectly assign YELLOW to the last "s" in "sells" because it checks each letter independently, noticing that "s" appears in "bells" without accounting for the fact that the "s" has already been matched.
-
-Solution Approach
-A solution requires an approach that accounts for the frequency of each letter in both the guess and the target word. One way to achieve this is by first marking all correctly positioned letters (GREEN), then marking the remaining letters as YELLOW only if the letter exists in the target word and has not been fully matched yet. Any letters that do not meet these criteria should be marked as GREY.
-
-Implementation Suggestions
-Modify check_letter: Update check_letter to take additional information, such as the list of letters that have already been correctly guessed or the frequency of each letter in the guess and the target word. However, this might complicate the check_letter function, making it less intuitive.
-
-Directly Compute Clues in check_guess: A better approach might be to adjust the logic within check_guess to first mark all GREEN clues, then mark YELLOW clues while keeping track of the frequency of each letter in the target word to ensure letters are not over-matched.
-
-Letter Frequency Tracking: Before iterating through the guess, create a dictionary to count the occurrences of each letter in the target word. As you assign GREEN clues, decrement the count for the matched letters. When considering YELLOW clues, only assign them if the letter's count is greater than zero, indicating that there are still unmatched occurrences of that letter in the target word.
 
 
 Reference Ideas:
