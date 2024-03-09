@@ -6,11 +6,10 @@ import { Input } from '@/components/ui/input'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { IoIosRefresh, IoIosWarning } from "react-icons/io";
 
-interface Guess {
+type Guess = {
   word: string;
   clues: string[];
-}
-
+};
 const API_URL = "http://127.0.0.1:5000/api";
 
 function App() {
