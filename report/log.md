@@ -21,6 +21,8 @@ Exported jupyter code into python in backend folder
 
 Then created main.py which creates endpoints for the game.
 
+
+
 Created frontend folder with Vite and followed Shadcn installation guide 
 
 used state and axios to get data from backend and display it on the frontend
