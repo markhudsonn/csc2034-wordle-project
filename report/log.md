@@ -21,8 +21,6 @@ Exported jupyter code into python in backend folder
 
 Then created main.py which creates endpoints for the game.
 
-
-
 Created frontend folder with Vite and followed Shadcn installation guide 
 
 used state and axios to get data from backend and display it on the frontend
@@ -51,7 +49,7 @@ Maybe I should have done a formal specification?
 
 Added get_answer to the extension game so that the user can see the answer and the game state is set to playing if not already lost. if this is called when the game is playing, the game state is set to lost to prevent cheating.
 
-Added get guesses to display on frontend
+Added get guesses to display on frontend, had to change the backend to return nice json format
 
 Implemented hard guess to frontend, this makes post request to hard guess endpoint
 

@@ -167,7 +167,7 @@ function App() {
           {guesses.map((guess, index) => (
             <li key={index} style={{marginBottom: '20px'}}>
               {guess.word.split('').map((letter, letterIndex) => {
-                const color = guess.clues[letterIndex] === 'GREEN' ? 'green' :
+                const colour = guess.clues[letterIndex] === 'GREEN' ? 'green' :
                               guess.clues[letterIndex] === 'YELLOW' ? 'orange' : 'grey';
                 const status = guess.clues[letterIndex];
                 return (
@@ -179,10 +179,10 @@ function App() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     borderRadius: '8px',
-                    backgroundColor: color,
+                    backgroundColor: colour,
                     display: 'inline-block',
                     color: status === 'GREY' ? 'black' : 'black',
-                    boxShadow: `0 0 15px ${color}`,
+                    boxShadow: `0 0 15px ${colour}`,
                     fontSize: '1.5em',
                     textAlign: 'center',
                     lineHeight: '60px'
@@ -242,4 +242,3 @@ function App() {
 }
 
 export default App;
-
