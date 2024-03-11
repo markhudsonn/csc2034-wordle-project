@@ -234,12 +234,6 @@ class Game:
         self.guesses = []
         self.gstate = Gamestate.PLAYING
 
-    def get_guesses_for_frontend(self) -> List[dict]:
-        """
-        Convert the guesses to a list of dictionaries for JSON for the frontend.
-        """
-        return [guess.to_dict() for guess in self.guesses]
-    
     def get_answer(self) -> Word:
         """
         Return the answer to the game and set the game state to lost.
@@ -249,9 +243,4 @@ class Game:
             self.gstate = Gamestate.LOST
 
         return self.answer
-    
-    def get_remaining_guesses(self) -> int:
-        """
-        Return the number of remaining guesses.
-        """
-        return MAX_GUESSES - len(self.guesses)
+

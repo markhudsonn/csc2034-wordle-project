@@ -45,7 +45,7 @@ def get_state():
 
 @app.route('/api/get_guesses', methods=['GET'])
 def get_guesses():
-  guesses = game.get_guesses_for_frontend()
+  guesses = [guess.to_dict() for guess in game.guesses]
   return jsonify({"guesses": guesses}), 200
 
 @app.route('/api/get_answer', methods=['GET'])
@@ -55,7 +55,7 @@ def get_answer():
 
 @app.route('/api/get_remaining_guesses', methods=['GET'])
 def get_remaining_guesses():
-  remaining_guesses = game.get_remaining_guesses()
+  remaining_guesses = wordle.MAX_GUESSES - len(game.guesses) 
   return jsonify({"remaining_guesses": remaining_guesses}), 200
 
 if __name__ == '__main__':
