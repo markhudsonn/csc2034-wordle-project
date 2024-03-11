@@ -228,7 +228,7 @@ function App() {
 
       {guesses.length > 0 && renderGuesses()}
       <div style={{ margin: '0 auto', width: '30%' }}>
-        <Input className="m-2" value={guess} onChange={handleGuessChange} placeholder="Enter 5 letter word..." />
+        <Input className="m-2" value={guess} onChange={handleGuessChange} maxLength={5} placeholder="Enter 5 letter word..." />
         <Button className="m-2" onClick={handleGuessSubmit}>Guess</Button>
         <Button className="m-2" variant="destructive" onClick={handleHardGuessSubmit}>Hard Guess</Button>
       </div>
