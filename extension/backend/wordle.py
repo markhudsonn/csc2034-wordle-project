@@ -44,8 +44,8 @@ class Guess:
     @word.setter
     def word(self, word: Word):
         # invariant
-        assert len(word) == WORD_LENGTH, \
-            f"Invariant violated: len(Guess.word) <> {WORD_LENGTH}"  
+        assert len(word) == WORD_LENGTH, "Invariant violated: len(Guess.word) <> 5"
+        assert word in WORDS, "Invariant violated: word not in word list"
         self._word = word
 
     @property
@@ -56,7 +56,8 @@ class Guess:
     def clues(self, clues: Clue):
         # invariant
         assert len(clues) == WORD_LENGTH, \
-            f"Invariant violated: len(Guess.clues) <> {WORD_LENGTH}"              
+            f"Invariant violated: len(Guess.clues) <> {WORD_LENGTH}"    
+        assert all(clue in [Clue.GREEN, Clue.YELLOW, Clue.GREY] for clue in clues), "Invariant violated: clues not valid"          
         self._clues = clues
 
     def to_dict(self) -> dict:
@@ -71,71 +72,67 @@ class Guess:
         """
         cluestr = [str(self.word[i]) + ": " + \
             self.clues[i].name for i in range(WORD_LENGTH)]
-        return f"{self.word}: {cluestr}"  
+        return f"{self.word}: {cluestr}"
 
 def check_guess(word: Word, guess: Word) -> List[Clue]:
-    """
-    Given the answer and a guess, compute the list of 
-    clues corresponding to each letter.
-    """
-    # pre-condition
-    assert len(word) == WORD_LENGTH, "word must be 5 letters long"
-    assert len(guess) == WORD_LENGTH, "guess must be 5 letters long"
-    # assert len(word) == WORD_LENGTH and \
-    #        len(guess) == WORD_LENGTH, "pre-check_guess failed"
-           
-    clues = [Clue.GREY] * WORD_LENGTH
-    
-    # letter_counts = {}
-    # for letter in word:
-    #     if letter in letter_counts:
-    #         letter_counts[letter] += 1
-    #     else:
-    #         letter_counts[letter] = 1
+  """
+  Given the answer and a guess, compute the list of 
+  clues corresponding to each letter.
+  """
+  # pre-conditions
+  assert len(word) == WORD_LENGTH, "word not correct length"
+  assert len(guess) == WORD_LENGTH, "guess not correct length"
+  assert word in WORDS, "word not in word list"
+  assert guess in WORDS, "guess not in word list"
 
-    letter_counts = Counter(word)
+  clues = [Clue.GREY] * WORD_LENGTH # set all clues to grey
+  
+  letter_counts = Counter(word) # returns dict with letter counts
 
-    for i, letter in enumerate(guess):
-        if letter == word[i]:
-            clues[i] = Clue.GREEN
-            letter_counts[letter] -= 1
+  for i, letter in enumerate(guess): # check for green clues
+      if letter == word[i]:
+          clues[i] = Clue.GREEN
+          letter_counts[letter] -= 1
 
-    for i, letter in enumerate(guess):
-        if letter != word[i] and letter in letter_counts and letter_counts[letter] > 0:
-            clues[i] = Clue.YELLOW
-            letter_counts[letter] -= 1
+  for i, letter in enumerate(guess): # check for yellow clues
+      if letter != word[i] and letter in letter_counts and letter_counts[letter] > 0:
+          clues[i] = Clue.YELLOW
+          letter_counts[letter] -= 1
 
-    # post-condition
-    assert len(clues) == WORD_LENGTH, "clues not 5 letters long"
+  # post-conditions
+  assert len(clues) == WORD_LENGTH, "clues not correct length"
+  assert all(clue in [Clue.GREEN, Clue.YELLOW, Clue.GREY] for clue in clues), "clues not valid"
 
-    return clues
+  return clues
 
 def hint(word: Word, guesses: List[Guess]) -> Hint:
-    """
-    Return random letter from the word that has not been guessed yet.
-    """
-    # pre-condition
-    assert len(word) == WORD_LENGTH, "word must be 5 letters long"
-    assert all(len(guess.word) == WORD_LENGTH for guess in guesses), "guesses must all be 5 letters long"
-    # assert len(word) == WORD_LENGTH and \
-    #           all(len(guess.word) == WORD_LENGTH for guess in guesses), "pre-hint failed"
-    
-    guessed_letters = set()
-    for guess in guesses:
-        for letter in guess.word:
-            guessed_letters.add(letter)
+  """
+  Return random letter from the word that has not been guessed yet.
+  """
+  # pre-conditions
+  assert len(word) == WORD_LENGTH, "word not correct length"
+  assert all(len(guess.word) == WORD_LENGTH for guess in guesses), "guesses not correct length"
+  
+  # creating set of guessed letters
+  guessed_letters = set()
+  for guess in guesses:
+      for letter in guess.word:
+          guessed_letters.add(letter)
 
-    unguessed_letters = [letter for letter in word if letter not in guessed_letters]
-    
-    if unguessed_letters:
-        hint = random.choice(unguessed_letters)
-        assert len(hint) == 1, "hint must be a single letter"
-        assert hint.isalpha(), "hint must be a letter"
-        assert hint.isupper(), "hint must be uppercase"
-        # assert len(hint) == 1 and hint.isalpha() and hint.isupper(), "post-hint failed"
-        return hint
-    else:
-        return None
+  unguessed_letters = [letter for letter in word if letter not in guessed_letters]
+  
+  if not unguessed_letters:
+      return None
+
+  hint_letter = random.choice(unguessed_letters)
+
+  # post-conditions
+  assert hint_letter in word, "hint not in word"
+  assert hint_letter not in guessed_letters, "hint already guessed"
+  assert len(hint_letter) == 1, "hint not single letter"
+  assert hint_letter.isalpha() or hint_letter.isupper(), "hint not a letter or not uppercase"
+
+  return hint_letter
 
 class Game:
     answer: Word
@@ -185,12 +182,9 @@ class Game:
         for guess in self.guesses:
             for i, letter in enumerate(guess.word):
                 if guess.clues[i] == Clue.GREEN:
-                    green_letters[i] = letter
+                    green_letters[i] = letter # add green letters to dict with index as key
                 elif guess.clues[i] == Clue.YELLOW:
                     yellow_letters.add(letter)
-
-        for i, letter in green_letters.items():
-            assert word[i] == letter, f"Green letter {letter} must be at position {i+1}"
 
         # post-conditions
         assert all(word[i] == letter for i, letter in green_letters.items()), "Green letters not in word at correct position"
@@ -199,7 +193,7 @@ class Game:
         self.guesses.append(Guess(word, check_guess(self.answer, word)))
         if word == self.answer: self.gstate = Gamestate.WON
         elif len(self.guesses) == MAX_GUESSES: self.gstate = Gamestate.LOST
-        
+            
     def get_hint(self) -> Hint:
         """
         Get a hint for the current game.
