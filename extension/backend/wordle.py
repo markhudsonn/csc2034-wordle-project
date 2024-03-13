@@ -62,7 +62,7 @@ class Guess:
 
     def to_dict(self) -> dict:
         """
-        Convert the guess to a dictionary for JSON.
+        Convert the guess to a dictionary.
         """
         return {"word": self.word, "clues": [clue.name for clue in self.clues]}
 
@@ -232,7 +232,6 @@ class Game:
         """
         Return the answer to the game and set the game state to lost.
         """
-
         if self.gstate == Gamestate.PLAYING:
             self.gstate = Gamestate.LOST
 
