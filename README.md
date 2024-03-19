@@ -1,5 +1,5 @@
 # CSCS2034 Wordle Project
-Created for CSC2034 Science of programming module. 
+Created for CSC2034 Science of programming module. A wordle game in Jupyter notebook later converted into a Flask backend and React frontend an extension task.
 
 ## Running extension task
 
