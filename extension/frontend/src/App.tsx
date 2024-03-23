@@ -21,15 +21,16 @@ function App() {
   const [hint, setHint] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
-  const [remainingGuesses, setRemainingGuesses] = useState<number>();
+  const [remainingGuesses, setRemainingGuesses] = useState<number>(6);
 
   useEffect(() => {
     if(!sessionStorage.getItem("session_id")) {
       handleNewGame();
+    } else {
+      getState();
+      getGuesses();
+      getRemainingGuesses();
     }
-    getState();
-    getGuesses();
-    getRemainingGuesses();
   }, []);
 
   useEffect(() => {
@@ -160,7 +161,7 @@ function App() {
         setHint("");
         setGuess("");
         setAnswer("");
-        getRemainingGuesses();
+        setRemainingGuesses(6); // Reset remaining guesses when a new game starts
         const session_id = response.data.session_id;
         sessionStorage.setItem("session_id", session_id);
       }
