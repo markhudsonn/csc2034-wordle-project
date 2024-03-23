@@ -1,12 +1,13 @@
 # CSCS2034 Wordle Project
-Created for CSC2034 Science of programming module. A wordle game in Jupyter notebook later converted into a Flask backend and React frontend an extension task. Live demo can be found [here](https://wordle.markhuds.com/).
+Created for CSC2034 Science of programming module. A wordle game in Jupyter notebook later converted into a Flask backend and React frontend as an extension task. Live demo can be found [here](https://wordle.markhuds.com/).
 
-## Tech Stack
+## Tech
 
 - **Languages**: Python, TypeScript
 - **Frameworks**: Flask, React
-- **Styling**: CSS, Tailwind CSS
-- **Deployment**: Fly.io (backend), Vercel (frontend)
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **Hosting**: Fly.io (backend), Vercel (frontend)
 
 ## Running extension task
 

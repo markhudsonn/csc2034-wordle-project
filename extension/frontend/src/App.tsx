@@ -24,8 +24,12 @@ function App() {
   const [remainingGuesses, setRemainingGuesses] = useState<number>();
 
   useEffect(() => {
+    if(!sessionStorage.getItem("session_id")) {
+      handleNewGame();
+    }
     getState();
     getGuesses();
+    getRemainingGuesses();
   }, []);
 
   useEffect(() => {
@@ -35,7 +39,8 @@ function App() {
 
   const getState = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get_state`);
+      const session_id = sessionStorage.getItem("session_id");
+      const response = await axios.get(`${API_URL}/get_state?session_id=${session_id}`);
       setState(response.data.state);
       if(response.data.state === "LOST") {
         getAnswer();
@@ -51,7 +56,8 @@ function App() {
 
   const getGuesses = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get_guesses`);
+      const session_id = sessionStorage.getItem("session_id");
+      const response = await axios.get(`${API_URL}/get_guesses?session_id=${session_id}`);
       setGuesses(response.data.guesses);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -64,7 +70,8 @@ function App() {
 
   const getRemainingGuesses = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get_remaining_guesses`);
+      const session_id = sessionStorage.getItem("session_id");
+      const response = await axios.get(`${API_URL}/get_remaining_guesses?session_id=${session_id}`);
       setRemainingGuesses(response.data.remaining_guesses);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -82,7 +89,8 @@ function App() {
   const handleGuessSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/make_guess`, {word: guess});
+      const session_id = sessionStorage.getItem("session_id");
+      await axios.post(`${API_URL}/make_guess`, {word: guess, session_id: session_id});
       setGuess("");
       getState();
       getGuesses();
@@ -99,7 +107,7 @@ function App() {
   const handleHardGuessSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/make_hard_guess`, {word: guess});
+      await axios.post(`${API_URL}/make_hard_guess`, {word: guess, session_id: sessionStorage.getItem("session_id")});
       setGuess("");
       getState();
       getGuesses();
@@ -115,7 +123,8 @@ function App() {
 
   const getHint = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get_hint`);
+      const session_id = sessionStorage.getItem("session_id");
+      const response = await axios.get(`${API_URL}/get_hint?session_id=${session_id}`);
       setHint(response.data.hint);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -128,7 +137,8 @@ function App() {
 
   const getAnswer = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get_answer`);
+      const session_id = sessionStorage.getItem("session_id");
+      const response = await axios.get(`${API_URL}/get_answer?session_id=${session_id}`);
       setAnswer(response.data.answer);
       return response.data.answer;
     } catch (error) {
@@ -151,6 +161,8 @@ function App() {
         setGuess("");
         setAnswer("");
         getRemainingGuesses();
+        const session_id = response.data.session_id;
+        sessionStorage.setItem("session_id", session_id);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
