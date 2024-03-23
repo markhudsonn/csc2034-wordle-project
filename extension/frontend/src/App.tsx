@@ -229,18 +229,28 @@ function App() {
       )}
 
       {guesses.length > 0 && renderGuesses()}
-      <div style={{ margin: '0 auto', width: '30%' }}>
-        <Input className="m-2" value={guess} onChange={handleGuessChange} maxLength={5} placeholder="Enter 5 letter word..." />
-        <Button className="m-2" onClick={handleGuessSubmit}>Guess</Button>
-        <Button className="m-2" variant="destructive" onClick={handleHardGuessSubmit}>Hard Guess</Button>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <Input className="m-2" value={guess} onChange={handleGuessChange} maxLength={5} placeholder="Enter 5 letter word..." style={{ width: '100%', maxWidth: '300px' }} />
+        <div style={{ display: 'flex', width: '80%', justifyContent: 'space-between', maxWidth: '200px' }}>
+          <Button className="m-2" onClick={handleGuessSubmit}>Guess</Button>
+          <Button className="m-2" variant="destructive" onClick={handleHardGuessSubmit}>Hard Guess</Button>
+        </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Button className="m-2" variant="outline" onClick={getHint}>Get Hint</Button>
-        {hint && <div>Hint: {hint}</div>}
-        <Button className="m-2" variant="ghost" onClick={handleNewGame}><IoIosRefresh /></Button>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <Button className="m-2" variant="outline" onClick={getHint} style={{ width: '80%', maxWidth: '100px' }}>Get Hint</Button>
+        {hint && <div style={{ textAlign: 'center', width: '80%', maxWidth: '300px' }}>Hint: {hint}</div>}
+        <Button className="m-2" variant="ghost" onClick={handleNewGame} style={{ width: '80%', maxWidth: '50px' }}><IoIosRefresh /></Button>
       </div>
+      <footer style={{ position: 'fixed', bottom: '0', left: '0', right: '0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0', color: 'grey' }}>
+        <div style={{ marginLeft: '10px' }}>
+          <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer" style={{ color: 'grey', textDecoration: 'none' }}>Inspired by Wordle (NYT)</a>
+        </div>
+        <div style={{ marginRight: '10px' }}>
+          <p>Mark Hudson © 2024</p>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
 
 export default App;
