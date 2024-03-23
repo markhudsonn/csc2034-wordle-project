@@ -13,7 +13,6 @@ type Guess = {
 };
 
 const API_URL = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:5000/api' : 'https://full-stack-wordle-backend.fly.dev/api';
-console.log(API_URL)
 
 function App() {
   const [state, setState] = useState<string>("Connecting...");
@@ -165,9 +164,9 @@ function App() {
   const renderGuesses = () => {
     return (
       <div>
-        <ul style={{paddingBottom: '20px'}}>
+        <ul style={{paddingBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           {guesses.map((guess, index) => (
-            <li key={index} style={{marginBottom: '20px'}}>
+            <li key={index} style={{marginBottom: '20px', display: 'flex', justifyContent: 'center'}}>
               {guess.word.split('').map((letter, letterIndex) => {
                 const colour = guess.clues[letterIndex] === 'GREEN' ? 'green' :
                               guess.clues[letterIndex] === 'YELLOW' ? 'orange' : 'grey';
@@ -175,14 +174,15 @@ function App() {
                 return (
                   <span key={letter + letterIndex} style={{ 
                     fontWeight: 'bold', 
-                    marginRight: '15px',
+                    marginRight: '10px',
                     width: '60px',
+                    maxWidth: '60px',
                     height: '60px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     borderRadius: '8px',
                     backgroundColor: colour,
-                    display: 'inline-block',
+                    display: 'flex',
                     color: status === 'GREY' ? 'black' : 'black',
                     boxShadow: `0 0 15px ${colour}`,
                     fontSize: '1.5em',
@@ -202,7 +202,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>CSC2034 Wordle Game</h1>
+      <h1 style={{fontSize: '2em', fontWeight: 'bold'}}>Full Stack Wordle</h1>
       <b style={{ color: state === "PLAYING" ? 'black' : state === "WON" ? 'green' : 'red' }}>Game status: {state}</b>
       {state === "PLAYING" && remainingGuesses && <p>Remaining guesses: {remainingGuesses}</p>}
       <Separator className="my-5" />

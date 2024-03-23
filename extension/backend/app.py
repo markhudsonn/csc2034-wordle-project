@@ -61,3 +61,6 @@ def get_answer():
 def get_remaining_guesses():
   remaining_guesses = wordle.MAX_GUESSES - len(game.guesses) 
   return jsonify({"remaining_guesses": remaining_guesses}), 200
+
+if __name__ == '__main__':
+  app.run(debug=True)
