@@ -139,11 +139,11 @@ class Game:
     guesses: List[Guess]
     gstate: Gamestate
 
-    def __init__(self, answer="BELLS"):
+    def __init__(self):
         """
         Constructor for game.
         """
-        self.answer = answer
+        self.answer = random.choice(WORDS)
         self.guesses = []
         self.gstate = Gamestate.PLAYING
 
