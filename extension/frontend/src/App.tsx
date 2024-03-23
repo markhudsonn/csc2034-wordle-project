@@ -230,7 +230,7 @@ function App() {
 
       {guesses.length > 0 && renderGuesses()}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        <Input className="m-2" value={guess} onChange={handleGuessChange} maxLength={5} placeholder="Enter 5 letter word..." style={{ width: '100%', maxWidth: '300px' }} />
+        <Input className="m-2" value={guess} onChange={handleGuessChange} maxLength={5} placeholder="Enter 5 letter word..." style={{ width: '100%', maxWidth: '300px', fontSize: '16px' }} />
         <div style={{ display: 'flex', width: '80%', justifyContent: 'space-between', maxWidth: '200px' }}>
           <Button className="m-2" onClick={handleGuessSubmit}>Guess</Button>
           <Button className="m-2" variant="destructive" onClick={handleHardGuessSubmit}>Hard Guess</Button>
