@@ -1,15 +1,19 @@
-# fly.toml app configuration file generated for full-stack-worldle-frontend on 2024-03-22T22:24:14Z
+# fly.toml app configuration file generated for full-stack-wordle-backend on 2024-03-23T13:45:00Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'full-stack-worldle-frontend'
+app = 'full-stack-wordle-backend'
 primary_region = 'lhr'
 
 [build]
+  builder = 'paketobuildpacks/builder:base'
+
+[env]
+  PORT = '8080'
 
 [http_service]
-  internal_port = 80
+  internal_port = 8080
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true

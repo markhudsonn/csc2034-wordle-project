@@ -12,7 +12,8 @@ type Guess = {
   clues: string[];
 };
 
-const API_URL = "http://127.0.0.1:5000/api";
+const API_URL = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:5000/api' : 'https://full-stack-wordle-backend.fly.dev/api';
+console.log(API_URL)
 
 function App() {
   const [state, setState] = useState<string>("Connecting...");

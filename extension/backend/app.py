@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import wordle
 
@@ -6,6 +6,10 @@ app = Flask(__name__)
 CORS(app)
 
 game = wordle.Game()
+
+@app.route('/')
+def index():
+  return render_template('index.html')
 
 @app.errorhandler(AssertionError)
 def handle_assertion_error(e):
@@ -57,6 +61,3 @@ def get_answer():
 def get_remaining_guesses():
   remaining_guesses = wordle.MAX_GUESSES - len(game.guesses) 
   return jsonify({"remaining_guesses": remaining_guesses}), 200
-
-if __name__ == '__main__':
-  app.run(debug=True)
